@@ -211,7 +211,7 @@
                       <v-list-tile avatar>
                         <v-list-tile-content>
                            <v-list-tile-sub-title>Atenção:</v-list-tile-sub-title>
-                           <v-list-tile-title>Aguardando resposta da api</v-list-tile-title>
+                           <v-list-tile-title>Aguardando Informações</v-list-tile-title>
                           </v-list-tile-content>
                       </v-list-tile>
                   </v-list>
@@ -233,56 +233,37 @@ export default {
   data() {
     return {
       cnpj: "",
-      infoCnpj: {
-  "atividade_principal": [
-    {
-      "text": "Cabeleireiros, manicure e pedicure",
-      "code": "96.02-5-01"
-    }
-  ],
-  "data_situacao": "12/05/2016",
-  "complemento": "QUADRA 33;LOTE 14;SALA 01",
-  "nome": "ADRIANA OLINTO AFONSO 87556111172",
-  "uf": "GO",
-  "telefone": "(64) 9222-9953",
-  "atividades_secundarias": [
-    {
-      "text": "Comércio varejista de cosméticos, produtos de perfumaria e de higiene pessoal",
-      "code": "47.72-5-00"
-    }
-  ],
-  "qsa": [],
-  "situacao": "ATIVA",
-  "bairro": "POPULAR",
-  "logradouro": "R 74",
-  "numero": "676",
-  "cep": "75.903-480",
-  "municipio": "RIO VERDE",
-  "abertura": "12/05/2016",
-  "natureza_juridica": "213-5 - Empresário (Individual)",
-  "cnpj": "24.782.214/0001-25",
-  "ultima_atualizacao": "2018-09-19T00:06:49.541Z",
-  "status": "OK",
-  "tipo": "MATRIZ",
-  "fantasia": "",
-  "email": "",
-  "efr": "",
-  "motivo_situacao": "",
-  "situacao_especial": "",
-  "data_situacao_especial": "",
-  "capital_social": "15000.00",
-  "extra": {},
-  "billing": {
-    "free": true,
-    "database": true
-  }
-},
+      infoCnpj: {}
     };
   },
   methods: {
     pesquisar: function() {
-      var link = "https://www.receitaws.com.br/v1/cnpj/" + this.cnpj;
-      console.log(link)
+      let link = "https://cors.io/?https://www.receitaws.com.br/v1/cnpj/" + this.cnpj;
+
+      this.infoCnpj = {};
+
+      let varVue = this;
+
+      var myHeaders = new Headers();
+
+      var myInit = {
+        method: "GET",
+        headers: myHeaders,
+        mode: "cors",
+        cache: "default"
+      };
+
+      fetch(link, myInit).then(function(res){
+            return res.text();
+        })
+        .then(function(data){
+            varVue.pegar(JSON.parse(data));
+        })
+
+
+    },
+    pegar: function(infoRecebida){
+      this.infoCnpj = infoRecebida;
     }
   }
 };
